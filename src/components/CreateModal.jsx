@@ -1,26 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import TaskServic from "../services/TaskServic";
+import client from "../services/client";
 function Example({ funk }) {
   const [show, setShow] = useState(false);
-  const [number, setNumber] = useState(null);
+  const [number, setNumber] = useState("");
   const [title, setTitle] = useState("");
-
+  const [data, setData] = useState();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   // const reload = () => window.location.reload();
-  const createTable = async () => {
-    await TaskServic.createTask({
-      title: title,
-      number: number,
-    });
-    await handleClose();
-    await funk();
+
+  function createData() {
+    const res = client
+      .service("documents")
+      .create({ title, number })
+      .then((responce) => console.log("responce", responce));
+
+    console.log("responce value", res);
+  }
+  console.log("data", data);
+
+  const createTable = () => {
+    // TaskServic.createTask({
+    //   title: title,
+    //   number: number,
+    // });
+    // app.service("documents").create({
+    //   text: "A message from a REST client",
+    // });
+    // console.log("client", app, "yasha");
+    handleClose();
+    funk();
   };
 
-  console.log(number, title);
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
@@ -57,7 +72,7 @@ function Example({ funk }) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={createTable}>
+          <Button variant="primary" onClick={createData}>
             Create
           </Button>
         </Modal.Footer>
