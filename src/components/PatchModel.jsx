@@ -3,38 +3,32 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import TaskServic from "../services/TaskServic";
+import client from "../services/client";
 
 function Example({ funk, id }) {
   const [show, setShow] = useState(false);
-  const [number, setNumber] = useState(null);
+  const [number, setNumber] = useState("");
   const [title, setTitle] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const patchTable = async () => {
-    if (title === "") {
-      await TaskServic.patchTask(
-        {
-          number: number,
-        },
-        id
-      );
-    } else if (number === null) {
-      await TaskServic.patchTask(
-        {
-          title: title,
-        },
-        id
-      );
-    } else {
-      await TaskServic.patchTask(
-        {
-          title: title,
-          number: number,
-        },
-        id
-      );
+    if (number !== "" && title !== "") {
+      await client
+        .service("documents")
+        .patch(id, { number, title })
+        .then((responce) => console.log(responce));
+    } else if (number !== "") {
+      await client
+        .service("documents")
+        .patch(id, { number })
+        .then((responce) => console.log(responce));
+    } else if (title !== "") {
+      await client
+        .service("documents")
+        .patch(id, { title })
+        .then((responce) => console.log(responce));
     }
 
     await handleClose();
@@ -60,7 +54,6 @@ function Example({ funk, id }) {
               <Form.Label>Titile</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Name"
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
               />
@@ -69,7 +62,6 @@ function Example({ funk, id }) {
               <Form.Label>Number</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Name"
                 value={number}
                 onChange={(event) => setNumber(event.target.value)}
               />

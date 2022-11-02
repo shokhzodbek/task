@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import TaskServic from "../services/TaskServic";
+// import TaskServic from "../services/TaskServic";
 import client from "../services/client";
 function Example({ funk }) {
   const [show, setShow] = useState(false);
@@ -17,24 +17,25 @@ function Example({ funk }) {
     const res = client
       .service("documents")
       .create({ title, number })
-      .then((responce) => console.log("responce", responce));
-
+      .then((responce) => setData(responce));
+    handleClose();
+    funk();
     console.log("responce value", res);
   }
   console.log("data", data);
 
-  const createTable = () => {
-    // TaskServic.createTask({
-    //   title: title,
-    //   number: number,
-    // });
-    // app.service("documents").create({
-    //   text: "A message from a REST client",
-    // });
-    // console.log("client", app, "yasha");
-    handleClose();
-    funk();
-  };
+  // const createTable = () => {
+  //   // TaskServic.createTask({
+  //   //   title: title,
+  //   //   number: number,
+  //   // });
+  //   // app.service("documents").create({
+  //   //   text: "A message from a REST client",
+  //   // });
+  //   // console.log("client", app, "yasha");
+  //   handleClose();
+  //   funk();
+  // };
 
   return (
     <>

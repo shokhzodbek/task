@@ -3,25 +3,31 @@ import Example from "./CreateModal";
 import UpdateModal from "./UpdateModal";
 import PatchModal from "./PatchModel";
 import { useEffect, useState } from "react";
-import TaskServic from "../services/TaskServic";
+// import TaskServic from "../services/TaskServic";
+import client from "../services/client";
 function TableTask() {
   const [data, setData] = useState([]);
   const [up, setUp] = useState(true);
   useEffect(() => {
-    const getData = async () => {
-      await TaskServic.getTasks().then((res) => {
-        setData(res.data.data);
-      });
+    const getData = () => {
+      let res = client
+        .service("documents")
+        .find()
+        .then((res) => setData(res.data));
+      console.log("res", res);
     };
     getData();
   }, [up]);
 
-  console.log(data);
+  console.log("datatest", data);
 
   const deleteTask = (id) => {
-    TaskServic.deleteTask(id).then((res) => {
-      setData((item) => item.filter((it) => it._id !== id));
-    });
+    client
+      .service("documents")
+      .remove(id)
+      .then((res) => {
+        setData((item) => item.filter((it) => it._id !== id));
+      });
   };
   console.log(data);
   const upFunc = () => {

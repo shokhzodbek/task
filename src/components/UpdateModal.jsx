@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import TaskServic from "../services/TaskServic";
+// import TaskServic from "../services/TaskServic";
+import client from "../services/client";
 function Example({ funk, id }) {
   const [show, setShow] = useState(false);
   const [number, setNumber] = useState(null);
@@ -12,13 +13,10 @@ function Example({ funk, id }) {
   const handleShow = () => setShow(true);
 
   const updateTable = async () => {
-    await TaskServic.updateTask(
-      {
-        title: title,
-        number: number,
-      },
-      id
-    );
+    await client
+      .service("documents")
+      .update(id, { number, title })
+      .then((responce) => console.log(responce));
     await handleClose();
     await funk();
   };
@@ -44,7 +42,6 @@ function Example({ funk, id }) {
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Name"
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
               />
@@ -53,7 +50,6 @@ function Example({ funk, id }) {
               <Form.Label>Number</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Name"
                 value={number}
                 onChange={(event) => setNumber(event.target.value)}
               />
@@ -65,7 +61,7 @@ function Example({ funk, id }) {
             Close
           </Button>
           <Button variant="primary" onClick={updateTable}>
-            Create
+            Update
           </Button>
         </Modal.Footer>
       </Modal>
